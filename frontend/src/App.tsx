@@ -1,15 +1,10 @@
-import { useState } from 'react'
-import { Badge, Button, Card, Carousel, Flex, Form, Input, Layout, List, Radio, Statistic } from 'antd'
+import { Badge, Button, Card, Carousel, Flex, Form, Input, Layout, List, Radio } from 'antd'
 import GoogleMapReact from 'google-map-react';
 import { v4 as uuidv4 } from 'uuid';
 
-const { Header, Footer, Sider, Content } = Layout;
-
-const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
-
+const { Header, Content } = Layout;
 
 function App() {
-  const [count, setCount] = useState(0)
   const defaultProps = {
     center: {
       lat: 35.627992493337665,
@@ -21,15 +16,18 @@ function App() {
   function connectClickHandler() {
 
   }
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const renderMarkers = (map: any, maps: any) => {
-    let marker = new maps.Marker({
+    const marker = new maps.Marker({
       position: { lat: 35.627992493337665, lng: 139.77536944338857 },
       map,
-      title: 'Hello World!'
+      title: 'traffic light'
     });
     return marker;
   };
 
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   const data = Array(10).fill(0).map(_ => ({
     title: uuidv4().substring(10)
   }))

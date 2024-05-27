@@ -1,22 +1,18 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-toolbox-viem"
+import type { HardhatUserConfig } from "hardhat/config"
 
-const { API_URL, PRIVATE_KEY } = process.env
+const PRIVATE_KEY = process.env.PRIVATE_KEY
 
 const config: HardhatUserConfig = {
   solidity: "0.8.24",
-  defaultNetwork: "sepolia",
+  defaultNetwork: "mantaTestnet",
   networks: {
-    hardhat: {},
-    sepolia: {
-      url: API_URL,
-      accounts: [ PRIVATE_KEY! ]
-    },
-    manta: {
+    mantaTestnet: {
       url: "https://pacific-rpc.sepolia-testnet.manta.network/http",
-      chainId: 3441006
-    }
-  }
-};
+      chainId: 3441006,
+      accounts: [ PRIVATE_KEY ],
+    },
+  },
+}
 
-export default config;
+export default config

@@ -36,24 +36,42 @@ contract TrafficData {
 
     event NewTrafficLightRegister(uint256 indexed index);
 
-    function registerTrafficLight(
-        TrafficLight memory input
-    ) public {
+    function getAllValidators()
+        public
+        view
+        returns (ValidatorMetadata[] memory)
+    {
+        ValidatorMetadata[] memory output = new ValidatorMetadata[](
+            validatorIndex
+        );
+        for (uint256 i = 0; i < validatorIndex; i++) {
+            address validatorAddress = validatorsAddresses[i];
+            ValidatorMetadata memory metadata = validators[validatorAddress];
+            output[i] = metadata;
+        }
+        return output;
+    }
+
+    function registerTrafficLight(TrafficLight memory input) public {
         input.owner = msg.sender;
         input.validationStatus = TrafficLightValidationStatus.Waiting;
         trafficLights.push(input);
 
         emit NewTrafficLightRegister(trafficLightsIndex);
         trafficLightsIndex += 1;
-
     }
 
-    function getTrafficLightByIndex(uint256 index) public view returns(TrafficLight memory) {
+    function getTrafficLightByIndex(
+        uint256 index
+    ) public view returns (TrafficLight memory) {
         require(trafficLightsIndex > index, "index out of range");
         return trafficLights[index];
     }
 
-    function registerValidator(string calldata name, string[] calldata supportedModels) public {
+    function registerValidator(
+        string calldata name,
+        string[] calldata supportedModels
+    ) public {
         ValidatorMetadata memory metadata = ValidatorMetadata({
             name: name,
             owner: msg.sender,
@@ -66,7 +84,9 @@ contract TrafficData {
         validatorIndex += 1;
     }
 
-    function getValidatorMetadata(address validator) public view returns(ValidatorMetadata memory) {
+    function getValidatorMetadata(
+        address validator
+    ) public view returns (ValidatorMetadata memory) {
         return validators[validator];
     }
 
@@ -103,5 +123,9 @@ contract TrafficData {
         trafficLights[id].lng = lng;
         trafficLights[id].orientation = orientation;
         trafficLights[id].uri = uri;
+    }
+
+    function getTrafficLights() public view returns (TrafficLight[] memory) {
+        return trafficLights;
     }
 }

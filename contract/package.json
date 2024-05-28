@@ -5,11 +5,15 @@
     "test": "hardhat test",
     "start:node": "hardhat node",
     "interact:register-traffic": "hardhat run ./scripts/RegisterTrafficData.ts",
+    "interact:register-validator": "hardhat run ./scripts/RegisterValidator.ts",
     "run:validator": "hardhat run ./validator/TrafficDataValidator.ts",
     "deploy:traffic": "hardhat ignition deploy ./ignition/modules/TrafficData.ts --network mantaTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "hardhat": "^2.22.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }

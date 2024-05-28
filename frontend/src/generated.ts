@@ -43,6 +43,29 @@ export const trafficDataAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'getAllValidators',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct TrafficData.ValidatorMetadata[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'owner', internalType: 'address', type: 'address' },
+          {
+            name: 'supportedModels',
+            internalType: 'string[]',
+            type: 'string[]',
+          },
+          { name: 'validatedCount', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'getIndex',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -56,6 +79,31 @@ export const trafficDataAbi = [
         name: '',
         internalType: 'struct TrafficData.TrafficLight',
         type: 'tuple',
+        components: [
+          { name: 'owner', internalType: 'address', type: 'address' },
+          { name: 'lat', internalType: 'uint256', type: 'uint256' },
+          { name: 'lng', internalType: 'uint256', type: 'uint256' },
+          { name: 'orientation', internalType: 'uint256', type: 'uint256' },
+          { name: 'uri', internalType: 'string[]', type: 'string[]' },
+          {
+            name: 'validationStatus',
+            internalType: 'enum TrafficData.TrafficLightValidationStatus',
+            type: 'uint8',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTrafficLights',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct TrafficData.TrafficLight[]',
+        type: 'tuple[]',
         components: [
           { name: 'owner', internalType: 'address', type: 'address' },
           { name: 'lat', internalType: 'uint256', type: 'uint256' },
@@ -227,6 +275,15 @@ export const useReadTrafficDataLlaDecimal = /*#__PURE__*/ createUseReadContract(
 )
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"getAllValidators"`
+ */
+export const useReadTrafficDataGetAllValidators =
+  /*#__PURE__*/ createUseReadContract({
+    abi: trafficDataAbi,
+    functionName: 'getAllValidators',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"getIndex"`
  */
 export const useReadTrafficDataGetIndex = /*#__PURE__*/ createUseReadContract({
@@ -241,6 +298,15 @@ export const useReadTrafficDataGetTrafficLightByIndex =
   /*#__PURE__*/ createUseReadContract({
     abi: trafficDataAbi,
     functionName: 'getTrafficLightByIndex',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"getTrafficLights"`
+ */
+export const useReadTrafficDataGetTrafficLights =
+  /*#__PURE__*/ createUseReadContract({
+    abi: trafficDataAbi,
+    functionName: 'getTrafficLights',
   })
 
 /**

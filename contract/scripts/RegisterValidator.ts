@@ -41,16 +41,12 @@ async function main() {
 
   console.log(await trafficData.read.getIndex())
 
-  const tx = await trafficData.write.registerTrafficLight(
+  const tx = await trafficData.write.registerValidator(
     [
-      {
-        owner: account.address,
-        lat: BigInt(35627992),
-        lng: BigInt(139775369),
-        orientation: BigInt(2321213),
-        uri: [ "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQktRQeMv6mvYzVr3gT0qLUYjbtBjpcNNGvPxpHENpTGg&s" ],
-        validationStatus: 0,
-      },
+      "validator-2",
+      [
+        "yolov6",
+      ],
     ],
     {
       account,

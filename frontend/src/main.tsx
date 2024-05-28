@@ -12,12 +12,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom"
+import { mantaSepoliaTestnet } from "viem/chains"
 import {
   createConfig,
   http,
   WagmiProvider,
 } from "wagmi"
-import { mantaSepoliaTestnet } from "wagmi/chains"
 import "./index.css"
 import RootPage from "./routes/RootPage"
 import TrafficDataPage from "./routes/TrafficData"
@@ -42,8 +42,12 @@ const router = createBrowserRouter([
 
 const config = createConfig(
   getDefaultConfig({
-    chains: [ mantaSepoliaTestnet ],
+    chains: [
+      // hardhat,
+      mantaSepoliaTestnet,
+    ],
     transports: {
+      // [hardhat.id]: http(),
       [mantaSepoliaTestnet.id]: http(),
     },
     walletConnectProjectId: "3744d5a2fe976f821f378bdd74fcab66",

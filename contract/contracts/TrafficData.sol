@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 contract TrafficData {
     uint public constant LLA_DECIMAL = 6;
+    IERC20 trafficToken;
+    address private owner;
 
     struct TrafficLight {
         address owner;
@@ -21,7 +25,7 @@ contract TrafficData {
     }
 
     uint256 public trafficLightsIndex = 0;
-    TrafficLight[] public trafficLights;
+    TrafficLight[] private trafficLights;
 
     struct ValidatorMetadata {
         string name;
@@ -35,6 +39,19 @@ contract TrafficData {
     address[] public validatorsAddresses;
 
     event NewTrafficLightRegister(uint256 indexed index);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+   modifier onlyOwner() {
+        require(msg.sender == owner, "not owner");
+        _;
+    }
+
+    function registerToken(address _token)  public onlyOwner {
+        trafficToken = IERC20(_token);
+    }
 
     function getAllValidators()
         public
@@ -59,12 +76,17 @@ contract TrafficData {
 
         emit NewTrafficLightRegister(trafficLightsIndex);
         trafficLightsIndex += 1;
+
+        trafficToken.transfer(msg.sender, 10);
     }
 
     function getTrafficLightByIndex(
         uint256 index
-    ) public view returns (TrafficLight memory) {
+    ) public returns (TrafficLight memory) {
         require(trafficLightsIndex > index, "index out of range");
+
+        trafficToken.transferFrom(msg.sender, address(this), 1);
+
         return trafficLights[index];
     }
 
@@ -125,7 +147,9 @@ contract TrafficData {
         trafficLights[id].uri = uri;
     }
 
-    function getTrafficLights() public view returns (TrafficLight[] memory) {
+    function getTrafficLights() public returns (TrafficLight[] memory) {
+        uint tokenAmount = trafficLights.length;
+        trafficToken.transferFrom(msg.sender, address(this), tokenAmount);
         return trafficLights;
     }
 }

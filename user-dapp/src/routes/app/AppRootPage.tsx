@@ -6,7 +6,7 @@ import {
 } from "antd/lib/layout/layout"
 import { Outlet } from "react-router-dom"
 
-export default function Root() {
+export default function AppRootPage() {
   return (
     <Layout className="h-full bg-zinc-900">
       <Content className="h-full overflow-auto">

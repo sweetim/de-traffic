@@ -6,7 +6,7 @@ import {
 } from "react"
 import { useNavigate } from "react-router-dom"
 
-const Landing: FC = () => {
+const LandingPage: FC = () => {
   const navigate = useNavigate()
 
   const {
@@ -34,4 +34,4 @@ const Landing: FC = () => {
   )
 }
 
-export default Landing
+export default LandingPage

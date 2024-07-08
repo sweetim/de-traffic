@@ -5,7 +5,7 @@ import {
 } from "react"
 import { Outlet } from "react-router-dom"
 
-const ParentRoot: FC = () => {
+const RootPage: FC = () => {
   const {
     initModal,
     web3Auth,
@@ -30,4 +30,4 @@ const ParentRoot: FC = () => {
   )
 }
 
-export default ParentRoot
+export default RootPage

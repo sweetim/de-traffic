@@ -11,7 +11,7 @@ import { mantaSepoliaTestnet } from "viem/chains"
 
 import hre from "hardhat"
 
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || ""
+const TRAFFIC_DATA_CONTRACT_ADDRESS = process.env.TRAFFIC_DATA_CONTRACT_ADDRESS || ""
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 
 const account = privateKeyToAccount(PRIVATE_KEY as `0x${string}`)
@@ -31,7 +31,7 @@ async function main() {
   const { abi } = hre.artifacts.readArtifactSync("TrafficData")
 
   const trafficData = getContract({
-    address: CONTRACT_ADDRESS as `0x${string}`,
+    address: TRAFFIC_DATA_CONTRACT_ADDRESS as `0x${string}`,
     abi,
     client: {
       public: publicClient,

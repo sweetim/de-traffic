@@ -17,6 +17,10 @@ import {
 } from "@web3auth/modal-react-hooks"
 import { WalletServicesPlugin } from "@web3auth/wallet-services-plugin"
 import { WalletServicesProvider } from "@web3auth/wallet-services-plugin-react-hooks"
+import {
+  ConfigProvider,
+  theme,
+} from "antd"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import {
@@ -24,49 +28,64 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import { toHex } from "viem"
-import { mantaSepoliaTestnet } from "viem/chains"
 import {
   createConfig,
   http,
   WagmiProvider,
 } from "wagmi"
+import { chainToUse } from "./contract/index.ts"
 import "./index.css"
 import ProtectedRoute from "./modules/common/ProtectedRoute.tsx"
-import Landing from "./routes/Landing.tsx"
-import ParentRoot from "./routes/ParentRoot.tsx"
-import Account from "./routes/app/Account.tsx"
-import Capture from "./routes/app/Capture.tsx"
-import Home from "./routes/app/Home.tsx"
-import Root from "./routes/app/Root.tsx"
+import LandingPage from "./routes/LandingPage.tsx"
+import RootPage from "./routes/RootPage.tsx"
+import AccountPage from "./routes/app/AccountPage.tsx"
+import AppRootPage from "./routes/app/AppRootPage.tsx"
+import CapturePage from "./routes/app/CapturePage.tsx"
+import CollectionPage from "./routes/app/CollectionPage.tsx"
+import ImageDetectionPage from "./routes/app/ImageDetectionPage.tsx"
+import MapsPage from "./routes/app/MapsPage.tsx"
+import WalletPage from "./routes/app/WalletPage.tsx"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ParentRoot />,
+    element: <RootPage />,
     children: [
       {
         path: "/",
-        element: <Landing />,
+        element: <LandingPage />,
       },
       {
         path: "app",
         element: (
           <ProtectedRoute>
-            <Root />
+            <AppRootPage />
           </ProtectedRoute>
         ),
         children: [
           {
             path: "",
-            element: <Home />,
+            element: <MapsPage />,
+          },
+          {
+            path: "collection",
+            element: <CollectionPage />,
           },
           {
             path: "capture",
-            element: <Capture />,
+            element: <CapturePage />,
+          },
+          {
+            path: "image-detection",
+            element: <ImageDetectionPage />,
+          },
+          {
+            path: "wallet",
+            element: <WalletPage />,
           },
           {
             path: "account",
-            element: <Account />,
+            element: <AccountPage />,
           },
         ],
       },
@@ -76,12 +95,12 @@ const router = createBrowserRouter([
 
 const chainConfig: CustomChainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: toHex(mantaSepoliaTestnet.id),
-  rpcTarget: mantaSepoliaTestnet.rpcUrls.default.http[0],
-  displayName: mantaSepoliaTestnet.name,
-  blockExplorerUrl: mantaSepoliaTestnet.blockExplorers?.default.url || "https://sepolia.explorer.zksync.io/",
-  ticker: mantaSepoliaTestnet.nativeCurrency.symbol,
-  tickerName: mantaSepoliaTestnet.nativeCurrency.name,
+  chainId: toHex(chainToUse.id),
+  rpcTarget: chainToUse.rpcUrls.default.http[0],
+  displayName: chainToUse.name,
+  blockExplorerUrl: chainToUse.blockExplorers?.default.url || "https://sepolia.explorer.zksync.io/",
+  ticker: chainToUse.nativeCurrency.symbol,
+  tickerName: chainToUse.nativeCurrency.name,
   isTestnet: true,
 }
 
@@ -123,9 +142,9 @@ const web3AuthContextConfig: Web3AuthContextConfig = {
 const queryClient = new QueryClient()
 
 const config = createConfig({
-  chains: [ mantaSepoliaTestnet ],
+  chains: [ chainToUse ],
   transports: {
-    [mantaSepoliaTestnet.id]: http(),
+    [chainToUse.id]: http(),
   },
 })
 
@@ -135,7 +154,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <WalletServicesProvider context={Web3AuthInnerContext}>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
+            <ConfigProvider
+              theme={{
+                algorithm: theme.darkAlgorithm,
+              }}
+            >
+              <RouterProvider router={router} />
+            </ConfigProvider>
           </QueryClientProvider>
         </WagmiProvider>
       </WalletServicesProvider>

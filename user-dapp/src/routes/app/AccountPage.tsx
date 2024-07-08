@@ -1,4 +1,3 @@
-import { useWalletAddress } from "@/hooks/useWalletAddress"
 import FillButton from "@/modules/common/FillButton"
 import { useWeb3Auth } from "@web3auth/modal-react-hooks"
 import {
@@ -11,12 +10,14 @@ import {
   useState,
 } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAccount } from "wagmi"
 
-export default function Account() {
+export default function AccountPage() {
   const navigate = useNavigate()
 
   const [ profileImage, setProfileImage ] = useState("")
-  const { walletAddress } = useWalletAddress()
+  // const { walletAddress } = useWalletAddress()
+  const { address: walletAddress } = useAccount()
 
   const {
     logout,
@@ -41,7 +42,7 @@ export default function Account() {
       <Space direction="vertical" size="large" align="center">
         <Avatar size={128} src={profileImage} />
         <Paragraph style={{ width: 300, color: "white" }} ellipsis copyable className="font-bold">
-          {walletAddress.toString()}
+          {walletAddress && walletAddress.toString()}
         </Paragraph>
         <FillButton onClick={logoutClickHandler}>
           <p>LOGOUT</p>

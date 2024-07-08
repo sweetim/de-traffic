@@ -6,9 +6,14 @@ import {
   Wallet,
 } from "@phosphor-icons/react"
 import { FC } from "react"
-import { Link } from "react-router-dom"
+import {
+  Link,
+  useLocation,
+} from "react-router-dom"
 
 const BottomNavBar: FC = () => {
+  const location = useLocation()
+
   return (
     <div className="w-full h-16 bg-zinc-800 border-none">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
@@ -22,7 +27,7 @@ const BottomNavBar: FC = () => {
           </span>
         </Link>
         <Link
-          to="/app/contacts"
+          to="/app/collection"
           className="inline-flex flex-col items-center justify-center px-5 hover:bg-zinc-900 group"
         >
           <BriefcaseMetal size={32} color="#6b7280" weight="fill" className="group-hover:fill-[#ffebeb]" />

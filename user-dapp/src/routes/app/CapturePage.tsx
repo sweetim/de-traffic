@@ -6,9 +6,12 @@ import {
   useRef,
   useState,
 } from "react"
+import { useNavigate } from "react-router-dom"
 import Webcam from "react-webcam"
+import "./CapturePage.css"
 
-const Capture: FC = () => {
+const CapturePage: FC = () => {
+  const navigate = useNavigate()
   const webcamRef = useRef<Webcam>(null)
   const videoContainerRef = useRef<HTMLDivElement | null>(null)
 
@@ -18,8 +21,16 @@ const Capture: FC = () => {
   const capture = useCallback(() => {
     if (!webcamRef) return
     if (!webcamRef.current) return
+    console.log("capture dimension", width, height)
+    const imageSrc = webcamRef.current.getScreenshot()
 
-    // const imageSrc = webcamRef.current.getScreenshot()
+    navigate("/app/image-detection", {
+      state: {
+        image: imageSrc,
+        width,
+        height,
+      },
+    })
   }, [ webcamRef ])
 
   useEffect(() => {
@@ -36,12 +47,8 @@ const Capture: FC = () => {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        videoConstraints={{
-          width,
-          height,
-        }}
       />
-      <div className="absolute bottom-3 left-1/3">
+      <div className="absolute flex flex-row justify-center mb-5 w-full bottom-0">
         <FillButton onClick={capture}>
           <p>Capture</p>
         </FillButton>
@@ -50,4 +57,4 @@ const Capture: FC = () => {
   )
 }
 
-export default Capture
+export default CapturePage

@@ -6,14 +6,9 @@ import {
   Wallet,
 } from "@phosphor-icons/react"
 import { FC } from "react"
-import {
-  Link,
-  useLocation,
-} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const BottomNavBar: FC = () => {
-  const location = useLocation()
-
   return (
     <div className="w-full h-16 bg-zinc-800 border-none">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">

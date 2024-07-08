@@ -47,7 +47,7 @@ const ImageDetection: FC = () => {
       // Predict bounding boxes
       const { outputs } = await model(inputs)
 
-      const sizes = inputs.reshaped_input_sizes[0].reverse()
+      // const sizes = inputs.reshaped_input_sizes[0].reverse()
 
       console.log(outputs.tolist())
       setDetectedObjects(
@@ -72,7 +72,7 @@ const ImageDetection: FC = () => {
       .size(430, 241)
 
     const [ w, h ] = [ 256, 256 ]
-    detectedObjects.forEach(([ xmin, ymin, xmax, ymax, score, id ]: number[]) => {
+    detectedObjects.forEach(([ xmin, ymin, xmax, ymax, score, _id ]: number[]) => {
       if (score > 0.25) {
         const left = 430 * (xmin / w)
         const top = 241 * (ymin / h)

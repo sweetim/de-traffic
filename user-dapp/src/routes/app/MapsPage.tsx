@@ -20,16 +20,14 @@ const DEFAULT_LOCATION = {
 }
 
 const MapsPage: FC = () => {
-  const { latitude, longitude, timestamp } = useGeolocation({
+  const { latitude, longitude } = useGeolocation({
     enableHighAccuracy: true,
   })
 
   const { trafficLights } = useOSMTrafficLightInfo(latitude, longitude, 1_000)
 
-  // const lat = latitude || DEFAULT_LOCATION.center.lat
-  // const lng = longitude || DEFAULT_LOCATION.center.lng
-  const lat = 35.768567463229445
-  const lng = 139.6471679645041
+  const lat = latitude || DEFAULT_LOCATION.center.lat
+  const lng = longitude || DEFAULT_LOCATION.center.lng
 
   async function marketClickHandler(item: TrafficLightOSMInfo) {
     console.log(item)

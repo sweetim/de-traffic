@@ -24,7 +24,7 @@ const RootPage: FC = () => {
   }, [ web3Auth ])
 
   return (
-    <div className="w-full h-screen bg-zinc-900">
+    <div className="w-full h-[100dvh] bg-zinc-900">
       <Outlet />
     </div>
   )

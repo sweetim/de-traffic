@@ -28,6 +28,7 @@
     "antd": "^5.18.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.14",
+    "immer": "^10.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
@@ -35,7 +36,8 @@
     "tailwind-merge": "^2.4.0",
     "ts-pattern": "^5.2.0",
     "viem": "^2.16.1",
-    "wagmi": "^2.10.4"
+    "wagmi": "^2.10.4",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/google-map-react": "^2.1.10",

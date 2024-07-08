@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./TrafficERC20.sol";
 
 contract TrafficData {
     uint public constant LLA_DECIMAL = 6;
-    IERC20 trafficToken;
+    TrafficERC20 trafficToken;
     address private owner;
 
     struct TrafficLight {
@@ -15,6 +15,19 @@ contract TrafficData {
         uint256 orientation;
         string[] uri;
         TrafficLightValidationStatus validationStatus;
+    }
+
+    struct TrafficLightDetection {
+        uint256 id;
+        uint256 lat;
+        uint256 lng;
+        uint256 orientation;
+        string cid;
+        uint256 topLeft_x;
+        uint256 topLeft_y;
+        uint256 width;
+        uint256 height;
+        uint256 score;
     }
 
     enum TrafficLightValidationStatus {
@@ -34,6 +47,7 @@ contract TrafficData {
         uint256 validatedCount;
     }
 
+    mapping(address => TrafficLightDetection[]) public trafficLightDetections;
     mapping(address => ValidatorMetadata) public validators;
     uint256 public validatorIndex = 0;
     address[] public validatorsAddresses;
@@ -49,8 +63,18 @@ contract TrafficData {
         _;
     }
 
+    function registerTrafficLightDetection(TrafficLightDetection memory input) public {
+        trafficLightDetections[msg.sender].push(input);
+        trafficToken.transfer(msg.sender, 10);
+    }
+
+    function getAllTrafficLightDetection(address user) external view returns(TrafficLightDetection[] memory) {
+        return trafficLightDetections[user];
+    }
+
     function registerToken(address _token)  public onlyOwner {
-        trafficToken = IERC20(_token);
+        trafficToken = TrafficERC20(_token);
+        trafficToken.mint(address(this), 100_000);
     }
 
     function getAllValidators()

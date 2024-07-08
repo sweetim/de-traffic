@@ -43,6 +43,31 @@ export const trafficDataAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'getAllTrafficLightDetection',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct TrafficData.TrafficLightDetection[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'id', internalType: 'uint256', type: 'uint256' },
+          { name: 'lat', internalType: 'uint256', type: 'uint256' },
+          { name: 'lng', internalType: 'uint256', type: 'uint256' },
+          { name: 'orientation', internalType: 'uint256', type: 'uint256' },
+          { name: 'cid', internalType: 'string', type: 'string' },
+          { name: 'topLeft_x', internalType: 'uint256', type: 'uint256' },
+          { name: 'topLeft_y', internalType: 'uint256', type: 'uint256' },
+          { name: 'width', internalType: 'uint256', type: 'uint256' },
+          { name: 'height', internalType: 'uint256', type: 'uint256' },
+          { name: 'score', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'getAllValidators',
     outputs: [
@@ -179,12 +204,58 @@ export const trafficDataAbi = [
   {
     type: 'function',
     inputs: [
+      {
+        name: 'input',
+        internalType: 'struct TrafficData.TrafficLightDetection',
+        type: 'tuple',
+        components: [
+          { name: 'id', internalType: 'uint256', type: 'uint256' },
+          { name: 'lat', internalType: 'uint256', type: 'uint256' },
+          { name: 'lng', internalType: 'uint256', type: 'uint256' },
+          { name: 'orientation', internalType: 'uint256', type: 'uint256' },
+          { name: 'cid', internalType: 'string', type: 'string' },
+          { name: 'topLeft_x', internalType: 'uint256', type: 'uint256' },
+          { name: 'topLeft_y', internalType: 'uint256', type: 'uint256' },
+          { name: 'width', internalType: 'uint256', type: 'uint256' },
+          { name: 'height', internalType: 'uint256', type: 'uint256' },
+          { name: 'score', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'registerTrafficLightDetection',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
       { name: 'name', internalType: 'string', type: 'string' },
       { name: 'supportedModels', internalType: 'string[]', type: 'string[]' },
     ],
     name: 'registerValidator',
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'trafficLightDetections',
+    outputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+      { name: 'lat', internalType: 'uint256', type: 'uint256' },
+      { name: 'lng', internalType: 'uint256', type: 'uint256' },
+      { name: 'orientation', internalType: 'uint256', type: 'uint256' },
+      { name: 'cid', internalType: 'string', type: 'string' },
+      { name: 'topLeft_x', internalType: 'uint256', type: 'uint256' },
+      { name: 'topLeft_y', internalType: 'uint256', type: 'uint256' },
+      { name: 'width', internalType: 'uint256', type: 'uint256' },
+      { name: 'height', internalType: 'uint256', type: 'uint256' },
+      { name: 'score', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -458,6 +529,15 @@ export const useReadTrafficDataLlaDecimal = /*#__PURE__*/ createUseReadContract(
 )
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"getAllTrafficLightDetection"`
+ */
+export const useReadTrafficDataGetAllTrafficLightDetection =
+  /*#__PURE__*/ createUseReadContract({
+    abi: trafficDataAbi,
+    functionName: 'getAllTrafficLightDetection',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"getAllValidators"`
  */
 export const useReadTrafficDataGetAllValidators =
@@ -481,6 +561,15 @@ export const useReadTrafficDataGetValidatorMetadata =
   /*#__PURE__*/ createUseReadContract({
     abi: trafficDataAbi,
     functionName: 'getValidatorMetadata',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"trafficLightDetections"`
+ */
+export const useReadTrafficDataTrafficLightDetections =
+  /*#__PURE__*/ createUseReadContract({
+    abi: trafficDataAbi,
+    functionName: 'trafficLightDetections',
   })
 
 /**
@@ -570,6 +659,15 @@ export const useWriteTrafficDataRegisterTrafficLight =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"registerTrafficLightDetection"`
+ */
+export const useWriteTrafficDataRegisterTrafficLightDetection =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: trafficDataAbi,
+    functionName: 'registerTrafficLightDetection',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"registerValidator"`
  */
 export const useWriteTrafficDataRegisterValidator =
@@ -646,6 +744,15 @@ export const useSimulateTrafficDataRegisterTrafficLight =
   /*#__PURE__*/ createUseSimulateContract({
     abi: trafficDataAbi,
     functionName: 'registerTrafficLight',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link trafficDataAbi}__ and `functionName` set to `"registerTrafficLightDetection"`
+ */
+export const useSimulateTrafficDataRegisterTrafficLightDetection =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: trafficDataAbi,
+    functionName: 'registerTrafficLightDetection',
   })
 
 /**

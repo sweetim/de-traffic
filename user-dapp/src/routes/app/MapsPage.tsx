@@ -1,7 +1,10 @@
+import { TRAFFIC_DATA_CONTRACT_ADDRESS } from "@/contract"
+import { useReadTrafficDataGetAllTrafficLightDetection } from "@/generated"
 import {
   TrafficLightOSMInfo,
   useOSMTrafficLightInfo,
 } from "@/hooks/useOSMTrafficLightInfo"
+import { useWalletInfo } from "@/hooks/useWalletInfo"
 import { useGeolocation } from "@uidotdev/usehooks"
 import {
   AdvancedMarker,
@@ -9,6 +12,7 @@ import {
   Map,
 } from "@vis.gl/react-google-maps"
 import { FC } from "react"
+import { useNavigate } from "react-router-dom"
 import "./MapsPage.css"
 
 const DEFAULT_LOCATION = {
@@ -20,9 +24,21 @@ const DEFAULT_LOCATION = {
 }
 
 const MapsPage: FC = () => {
+  const navigate = useNavigate()
   const { latitude, longitude } = useGeolocation({
     enableHighAccuracy: true,
   })
+
+  const { walletAddress } = useWalletInfo()
+
+  const { data: allTrafficLightDetection } = useReadTrafficDataGetAllTrafficLightDetection({
+    address: TRAFFIC_DATA_CONTRACT_ADDRESS,
+    args: [
+      walletAddress!,
+    ],
+  })
+
+  const detectedTrafficLightSet = new Set(allTrafficLightDetection?.map(item => Number(item.id)))
 
   const { trafficLights } = useOSMTrafficLightInfo(latitude, longitude, 1_000)
 
@@ -30,13 +46,17 @@ const MapsPage: FC = () => {
   const lng = longitude || DEFAULT_LOCATION.center.lng
 
   async function marketClickHandler(item: TrafficLightOSMInfo) {
-    console.log(item)
+    navigate("/app/capture", {
+      state: {
+        item,
+      },
+    })
   }
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API}>
       <Map
-        style={{ width: "100vw", height: "100vh" }}
+        className="h-full w-full"
         defaultCenter={DEFAULT_LOCATION.center}
         center={{
           lat: lat,
@@ -48,7 +68,7 @@ const MapsPage: FC = () => {
         disableDefaultUI={true}
         tilt={60}
       >
-        {trafficLights.map((item, index) => (
+        {trafficLights.map((item) => (
           <AdvancedMarker
             key={item.id}
             position={{
@@ -57,7 +77,7 @@ const MapsPage: FC = () => {
             }}
             onClick={() => marketClickHandler(item)}
           >
-            {index === 2 || index === 33
+            {detectedTrafficLightSet.has(item.id)
               ? <div className="pulsating-circle-traffic-capture" />
               : <div className="pulsating-circle-traffic" />}
           </AdvancedMarker>

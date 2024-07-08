@@ -1,5 +1,4 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers"
-import { expect } from "chai"
 import hre from "hardhat"
 
 describe("TrafficData", function() {
@@ -7,15 +6,59 @@ describe("TrafficData", function() {
     const [ owner, user_1 ] = await hre.viem.getWalletClients()
 
     const trafficData = await hre.viem.deployContract("TrafficData", [])
+    const ticketERC20 = await hre.viem.deployContract("TrafficERC20", [])
+
     const publicClient = await hre.viem.getPublicClient()
+
+    const [ ownerAddress ] = await owner.getAddresses()
 
     return {
       owner,
+      ownerAddress,
       user_1,
       trafficData,
+      ticketERC20,
       publicClient,
     }
   }
+
+  it("should register", async () => {
+    const {
+      ownerAddress,
+      trafficData,
+      ticketERC20,
+      publicClient,
+    } = await loadFixture(deployTrafficDataFixture)
+
+    await publicClient.waitForTransactionReceipt({
+      hash: await trafficData.write.registerToken([
+        ticketERC20.address,
+      ]),
+    })
+
+    await publicClient.waitForTransactionReceipt({
+      hash: await trafficData.write.registerTrafficLightDetection([
+        {
+          id: BigInt(0),
+          lat: BigInt(Math.floor(0 * 1e7)),
+          lng: BigInt(Math.floor(0 * 1e7)),
+          orientation: BigInt(0),
+          cid: "cid",
+          topLeft_x: BigInt(0),
+          topLeft_y: BigInt(0),
+          width: BigInt(0),
+          height: BigInt(0),
+          score: BigInt(Math.floor(0 * 1e7)),
+        },
+      ]),
+    })
+
+    const detectionResults = await trafficData.read.getAllTrafficLightDetection([
+      ownerAddress,
+    ])
+
+    console.log(detectionResults)
+  })
 
   describe("Deployment", () => {
     it("should able to deploy", async () => {

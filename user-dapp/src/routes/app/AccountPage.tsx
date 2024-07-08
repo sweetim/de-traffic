@@ -23,7 +23,7 @@ export default function AccountPage() {
     navigate("/")
   }
 
-  const avatar = match(!userInfo?.profileImage)
+  const avatar = match(userInfo?.profileImage)
     .with(P.string, () => <Avatar size={128} src={userInfo?.profileImage} />)
     .otherwise(() => <User size={128} color="#ffebeb" weight="fill" />)
 

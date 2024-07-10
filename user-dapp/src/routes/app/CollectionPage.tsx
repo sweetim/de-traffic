@@ -23,7 +23,7 @@ const CollectionPage: FC = () => {
   function trafficLightImageClickHandler(item: TrafficLightDetectionFromChain) {
     navigate(`${item.id}`)
   }
-  console.log(allTrafficLightDetection)
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-2">
       {allTrafficLightDetection

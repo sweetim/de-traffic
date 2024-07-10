@@ -2,7 +2,6 @@ import { TrafficLightDetection } from "@/contract"
 import {
   FC,
   MouseEventHandler,
-  useEffect,
   useRef,
   useState,
 } from "react"
@@ -12,28 +11,9 @@ type TrafficLightDetectionImageProps = {
   item: TrafficLightDetection
 }
 
-type ImageRefDimension = {
-  width: number
-  height: number
-}
-
 const TrafficLightDetectionImage: FC<TrafficLightDetectionImageProps> = ({ item, onClick }) => {
   const imageRef = useRef<HTMLImageElement | null>(null)
-
-  const [ imageRefDimension, setImageRefDimension ] = useState<ImageRefDimension>({
-    height: 0,
-    width: 0,
-  })
-
-  useEffect(() => {
-    if (!imageRef) return
-    if (!imageRef.current) return
-
-    setImageRefDimension({
-      height: imageRef.current.height,
-      width: imageRef.current.width,
-    })
-  }, [ imageRef.current?.width, imageRef.current?.height ])
+  const [ isLoaded, setIsLoaded ] = useState(false)
 
   return (
     <div className="relative z-0" onClick={onClick}>
@@ -41,14 +21,15 @@ const TrafficLightDetectionImage: FC<TrafficLightDetectionImageProps> = ({ item,
         ref={imageRef}
         src={`https://${import.meta.env.VITE_PINATA_GATEWAY}/${item.cid}`}
         alt={item.id.toString()}
+        onLoad={() => setIsLoaded(true)}
       />
-      {imageRef.current && (
+      {(isLoaded && imageRef.current) && (
         <div
           style={{
-            top: `${item.normalize.topLeft_y * imageRefDimension.height}px`,
-            left: `${item.normalize.topLeft_x * imageRefDimension.width}px`,
-            width: `${item.normalize.width * imageRefDimension.width}px`,
-            height: `${item.normalize.height * imageRefDimension.height}px`,
+            top: `${item.normalize.topLeft_y * imageRef.current.height}px`,
+            left: `${item.normalize.topLeft_x * imageRef.current.width}px`,
+            width: `${item.normalize.width * imageRef.current.width}px`,
+            height: `${item.normalize.height * imageRef.current.height}px`,
           }}
           className="absolute border-red-500 bg-red-400/[.3] border-solid border-4"
         >

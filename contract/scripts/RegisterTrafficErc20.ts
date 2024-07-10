@@ -18,14 +18,16 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 
 const account = privateKeyToAccount(PRIVATE_KEY as `0x${string}`)
 
+const chainToUse = mantaSepoliaTestnet
+
 const walletClient = createWalletClient({
   account,
-  chain: mantaSepoliaTestnet,
+  chain: chainToUse,
   transport: http(),
 })
 
 const publicClient = createPublicClient({
-  chain: mantaSepoliaTestnet,
+  chain: chainToUse,
   transport: http(),
 })
 

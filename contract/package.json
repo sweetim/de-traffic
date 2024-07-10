@@ -8,9 +8,10 @@
     "interact:register-validator": "hardhat run ./scripts/RegisterValidator.ts",
     "interact:mint-traffic-erc20": "hardhat run ./scripts/MintTrafficErc20.ts",
     "interact:register-traffic-erc20": "hardhat run ./scripts/RegisterTrafficErc20.ts",
+    "interact:send-eth-to": "hardhat run ./scripts/SendEthTo.ts",
     "run:validator": "hardhat run ./validator/TrafficDataValidator.ts",
-    "deploy:traffic-data": "hardhat ignition deploy ./ignition/modules/TrafficData.ts --network mantaTestnet",
-    "deploy:traffic-erc20": "hardhat ignition deploy ./ignition/modules/TrafficERC20.ts --network mantaTestnet"
+    "deploy:traffic-data": "hardhat ignition deploy ./ignition/modules/TrafficData.ts",
+    "deploy:traffic-erc20": "hardhat ignition deploy ./ignition/modules/TrafficERC20.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",

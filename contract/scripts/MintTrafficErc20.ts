@@ -7,25 +7,27 @@ import {
   http,
 } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
-import { mantaSepoliaTestnet } from "viem/chains"
+import { hardhat } from "viem/chains"
 
 import hre from "hardhat"
 
 const TICKET_ERC20_CONTRACT_ADDRESS = process.env.TICKET_ERC20_CONTRACT_ADDRESS || ""
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 
-const TO_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+const TO_ADDRESS = "0xeC1C571c8B817f9BC91C2cD55F4898f304EbdB5b"
 
 const account = privateKeyToAccount(PRIVATE_KEY as `0x${string}`)
 
+const CHAIN_TO_USE = hardhat
+
 const walletClient = createWalletClient({
   account,
-  chain: mantaSepoliaTestnet,
+  chain: CHAIN_TO_USE,
   transport: http(),
 })
 
 const publicClient = createPublicClient({
-  chain: mantaSepoliaTestnet,
+  chain: CHAIN_TO_USE,
   transport: http(),
 })
 

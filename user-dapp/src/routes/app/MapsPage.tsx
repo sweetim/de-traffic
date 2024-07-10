@@ -8,7 +8,6 @@ import { useWalletInfo } from "@/hooks/useWalletInfo"
 import { useGeolocation } from "@uidotdev/usehooks"
 import {
   AdvancedMarker,
-  APIProvider,
   Map,
 } from "@vis.gl/react-google-maps"
 import { FC } from "react"
@@ -54,44 +53,42 @@ const MapsPage: FC = () => {
   }
 
   return (
-    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API}>
-      <Map
-        className="h-full w-full"
-        defaultCenter={DEFAULT_LOCATION.center}
-        center={{
-          lat: lat,
-          lng: lng,
-        }}
-        defaultZoom={DEFAULT_LOCATION.zoom}
-        gestureHandling={"greedy"}
-        mapId={"4f6dde3310be51d7"}
-        disableDefaultUI={true}
-        tilt={60}
-      >
-        {trafficLights.map((item) => (
-          <AdvancedMarker
-            key={item.id}
-            position={{
-              lat: item.lat,
-              lng: item.lon,
-            }}
-            onClick={() => marketClickHandler(item)}
-          >
-            {detectedTrafficLightSet.has(item.id)
-              ? <div className="pulsating-circle-traffic-capture" />
-              : <div className="pulsating-circle-traffic" />}
-          </AdvancedMarker>
-        ))}
+    <Map
+      className="h-full w-full"
+      defaultCenter={DEFAULT_LOCATION.center}
+      center={{
+        lat: lat,
+        lng: lng,
+      }}
+      defaultZoom={DEFAULT_LOCATION.zoom}
+      gestureHandling={"greedy"}
+      mapId={"4f6dde3310be51d7"}
+      disableDefaultUI={true}
+      tilt={60}
+    >
+      {trafficLights.map((item) => (
         <AdvancedMarker
+          key={item.id}
           position={{
-            lat,
-            lng,
+            lat: item.lat,
+            lng: item.lon,
           }}
+          onClick={() => marketClickHandler(item)}
         >
-          <div className="pulsating-circle" />
+          {detectedTrafficLightSet.has(item.id)
+            ? <div className="pulsating-circle-traffic-capture" />
+            : <div className="pulsating-circle-traffic" />}
         </AdvancedMarker>
-      </Map>
-    </APIProvider>
+      ))}
+      <AdvancedMarker
+        position={{
+          lat,
+          lng,
+        }}
+      >
+        <div className="pulsating-circle" />
+      </AdvancedMarker>
+    </Map>
   )
 }
 

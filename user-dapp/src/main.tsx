@@ -41,6 +41,7 @@ import RootPage from "./routes/RootPage.tsx"
 import AccountPage from "./routes/app/AccountPage.tsx"
 import AppRootPage from "./routes/app/AppRootPage.tsx"
 import CapturePage from "./routes/app/CapturePage.tsx"
+import CollectionIdPage from "./routes/app/CollectionIdPage.tsx"
 import CollectionPage from "./routes/app/CollectionPage.tsx"
 import ImageDetectionPage from "./routes/app/ImageDetectionPage.tsx"
 import MapsPage from "./routes/app/MapsPage.tsx"
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
           {
             path: "collection",
             element: <CollectionPage />,
+            children: [],
+          },
+          {
+            path: "collection/:id",
+            element: <CollectionIdPage />,
           },
           {
             path: "capture",

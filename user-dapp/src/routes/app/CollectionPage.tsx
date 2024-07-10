@@ -1,9 +1,16 @@
-import { TRAFFIC_DATA_CONTRACT_ADDRESS } from "@/contract"
+import {
+  convertTrafficLightDetectionFromChain,
+  TRAFFIC_DATA_CONTRACT_ADDRESS,
+  TrafficLightDetectionFromChain,
+} from "@/contract"
 import { useReadTrafficDataGetAllTrafficLightDetection } from "@/generated"
 import { useWalletInfo } from "@/hooks/useWalletInfo"
+import TrafficLightDetectionImage from "@/modules/collection/TrafficLightDetectionImage"
 import { FC } from "react"
+import { useNavigate } from "react-router-dom"
 
 const CollectionPage: FC = () => {
+  const navigate = useNavigate()
   const { walletAddress } = useWalletInfo()
 
   const { data: allTrafficLightDetection } = useReadTrafficDataGetAllTrafficLightDetection({
@@ -13,13 +20,19 @@ const CollectionPage: FC = () => {
     ],
   })
 
+  function trafficLightImageClickHandler(item: TrafficLightDetectionFromChain) {
+    navigate(`${item.id}`)
+  }
   console.log(allTrafficLightDetection)
-
   return (
-    <div className="grid grid-cols-2 gap-2 p-2">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-2">
       {allTrafficLightDetection
-        && allTrafficLightDetection.map(item => (
-          <img src={`https://${import.meta.env.VITE_PINATA_GATEWAY}/${item.cid}`} alt={item.id.toString()} />
+        && allTrafficLightDetection.filter(item => Number(item.id) !== 2088386485).map(item => (
+          <TrafficLightDetectionImage
+            onClick={() => trafficLightImageClickHandler(item)}
+            key={item.id}
+            item={convertTrafficLightDetectionFromChain(item)}
+          />
         ))}
     </div>
   )

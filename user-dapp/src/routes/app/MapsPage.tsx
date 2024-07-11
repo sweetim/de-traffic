@@ -24,7 +24,7 @@ const DEFAULT_LOCATION = {
 
 const MapsPage: FC = () => {
   const navigate = useNavigate()
-  const { latitude, longitude } = useGeolocation({
+  const { latitude, longitude, heading } = useGeolocation({
     enableHighAccuracy: true,
   })
 
@@ -65,6 +65,7 @@ const MapsPage: FC = () => {
       mapId={"4f6dde3310be51d7"}
       disableDefaultUI={true}
       tilt={60}
+      heading={heading}
     >
       {trafficLights.map((item) => (
         <AdvancedMarker

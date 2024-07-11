@@ -34,7 +34,7 @@ const TrafficLightDetectionImage: FC<TrafficLightDetectionImageProps> = ({ item,
           className="absolute border-red-500 bg-red-400/[.3] border-solid border-4"
         >
           <p className="p-1 pb-2 font-bold text-base bg-red-300/[.5]">
-            {`${item.score.toFixed(3)`}
+            {`${item.score.toFixed(3)}`}
           </p>
         </div>
       )}

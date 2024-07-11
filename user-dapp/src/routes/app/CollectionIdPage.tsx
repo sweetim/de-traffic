@@ -102,21 +102,21 @@ const CollectionIdPage: FC = () => {
             <div className="bg-zinc-600 rounded-xl p-2">
               <Statistic
                 title="Latitude"
-                value={Number(item.lat) / 1e7}
+                value={item.lat}
                 precision={6}
               />
             </div>
             <div className="bg-zinc-600 rounded-xl p-2">
               <Statistic
                 title="Longitude"
-                value={Number(item.lng) / 1e7}
+                value={item.lng}
                 precision={6}
               />
             </div>
             <div className="bg-zinc-600 rounded-xl p-2">
               <Statistic
                 title="Orientation"
-                value={Number(item.orientation) / 1e7}
+                value={item.orientation}
                 precision={6}
               />
             </div>

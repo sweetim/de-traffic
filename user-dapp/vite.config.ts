@@ -20,9 +20,9 @@ export default defineConfig({
         enabled: true,
       },
       manifest: {
-        name: "meishi",
-        short_name: "meishi",
-        description: "decentralized business card exchange dapp",
+        name: "de-traffic",
+        short_name: "de-traffic",
+        description: "a data and dePIN dapp for annotating traffic light",
         theme_color: "#18181B",
         scope: "/",
         start_url: "/",

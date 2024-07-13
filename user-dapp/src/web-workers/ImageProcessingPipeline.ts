@@ -5,6 +5,7 @@ import {
   PreTrainedModel,
   RawImage,
 } from "@xenova/transformers"
+import { match } from "ts-pattern"
 
 env.allowLocalModels = false
 env.useBrowserCache = false
@@ -33,12 +34,19 @@ export type ImageProcessResult = {
   label: string
 }
 
-export type ImageProcessingPipelineMsg = {
-  action: "load" | "process" | "result"
-  rawImage?: any
-  results?: ImageProcessResult[]
-  sizes?: InputSize
-}
+export type ImageProcessingPipelineMsg =
+  | {
+    action: "load"
+  }
+  | {
+    action: "process"
+    rawImage: any
+  }
+  | {
+    action: "result"
+    results: ImageProcessResult[]
+    sizes: InputSize
+  }
 
 const MIN_DETECTION_THRESHOLD = 0.3
 const TRAFFIC_LIGHT_DETECTION_ID = 9
@@ -61,40 +69,40 @@ class ImageProcessingPipeline {
 }
 
 self.addEventListener("message", async (ev) => {
-  const { action, rawImage } = ev.data as ImageProcessingPipelineMsg
+  const data = ev.data as ImageProcessingPipelineMsg
 
-  if (action === "load") {
-    console.log("loading model")
-    await ImageProcessingPipeline.getInstance()
-    console.log("done loading model")
-    return
-  }
+  match(data)
+    .with({ action: "load" }, () => {
+      console.log("loading model")
+      ImageProcessingPipeline.getInstance()
+      console.log("done loading model")
+    })
+    .with({ action: "process" }, async ({ rawImage }) => {
+      const { model, processor } = await ImageProcessingPipeline.getInstance()
 
-  const { model, processor } = await ImageProcessingPipeline.getInstance()
+      if (!model) return
+      if (!processor) return
 
-  if (!model) return
-  if (!processor) return
-  if (!rawImage) return
+      const image = await RawImage.read(rawImage)
+      const inputs = await processor(image)
+      const { outputs } = await model(inputs)
 
-  const image = await RawImage.read(rawImage)
-  const inputs = await processor(image)
-  const { outputs } = await model(inputs)
+      const sizes = inputs.reshaped_input_sizes[0].reverse() as InputSize
 
-  const sizes = inputs.reshaped_input_sizes[0].reverse() as InputSize
-
-  self.postMessage({
-    action: "result",
-    sizes,
-    results: (outputs.tolist() as ModelOutput[])
-      .map(([ xmin, ymin, xmax, ymax, score, id ]) => ({
-        xmin,
-        ymin,
-        xmax,
-        ymax,
-        score,
-        id,
-        label: model.config.id2label[id] as string,
-      }))
-      .filter(({ score, id }) => score > MIN_DETECTION_THRESHOLD && id === TRAFFIC_LIGHT_DETECTION_ID),
-  } as ImageProcessingPipelineMsg)
+      self.postMessage({
+        action: "result",
+        sizes,
+        results: (outputs.tolist() as ModelOutput[])
+          .map(([ xmin, ymin, xmax, ymax, score, id ]) => ({
+            xmin,
+            ymin,
+            xmax,
+            ymax,
+            score,
+            id,
+            label: model.config.id2label[id] as string,
+          }))
+          .filter(({ score, id }) => score > MIN_DETECTION_THRESHOLD && id === TRAFFIC_LIGHT_DETECTION_ID),
+      } as ImageProcessingPipelineMsg)
+    })
 })

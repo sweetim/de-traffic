@@ -72,5 +72,6 @@ export default defineConfig({
   },
   define: {
     global: "globalThis",
+    "import.meta.vitest": "undefined",
   },
 })

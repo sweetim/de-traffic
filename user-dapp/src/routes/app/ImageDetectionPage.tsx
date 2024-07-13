@@ -87,39 +87,38 @@ const ImageDetection: FC = () => {
     if (!imageContainerRef) return
     if (!imageContainerRef.current) return
 
-    const onMessageReceivedHandler = (ev: MessageEvent<any>) => {
-      const { action, results, sizes } = ev.data as ImageProcessingPipelineMsg
+    const onMessageReceivedHandler = (ev: MessageEvent<ImageProcessingPipelineMsg>) => {
+      const { data } = ev
 
-      if (action === "result") {
-        if (!imageContainerRef) return
-        if (!imageContainerRef.current) return
-        if (!results) return
-        if (!sizes) return
+      match(data)
+        .with({ action: "result" }, ({ results, sizes }) => {
+          if (!imageContainerRef) return
+          if (!imageContainerRef.current) return
 
-        const [ w, h ] = sizes
-        const imageWidth = imageContainerRef.current.width
-        const imageHeight = imageContainerRef.current.height
+          const [ w, h ] = sizes
+          const imageWidth = imageContainerRef.current.width
+          const imageHeight = imageContainerRef.current.height
 
-        setDetectedObjects(
-          results.map(item => ({
-            normalize: {
-              topLeft_x: item.xmin / w,
-              topLeft_y: item.ymin / h,
-              width: (item.xmax - item.xmin) / w,
-              height: (item.ymax - item.ymin) / h,
-            },
-            visualize: {
-              topLeft_x: Math.floor((item.xmin / w) * imageWidth),
-              topLeft_y: Math.floor((item.ymin / h) * imageHeight),
-              width: Math.floor((item.xmax - item.xmin) / w * imageWidth),
-              height: Math.floor((item.ymax - item.ymin) / h * imageHeight),
-            },
-            label: item.label,
-            score: item.score,
-            item,
-          })),
-        )
-      }
+          setDetectedObjects(
+            results.map(item => ({
+              normalize: {
+                topLeft_x: item.xmin / w,
+                topLeft_y: item.ymin / h,
+                width: (item.xmax - item.xmin) / w,
+                height: (item.ymax - item.ymin) / h,
+              },
+              visualize: {
+                topLeft_x: Math.floor((item.xmin / w) * imageWidth),
+                topLeft_y: Math.floor((item.ymin / h) * imageHeight),
+                width: Math.floor((item.xmax - item.xmin) / w * imageWidth),
+                height: Math.floor((item.ymax - item.ymin) / h * imageHeight),
+              },
+              label: item.label,
+              score: item.score,
+              item,
+            })),
+          )
+        })
     }
 
     webWorkerRef.current.addEventListener("message", onMessageReceivedHandler)
@@ -139,24 +138,29 @@ const ImageDetection: FC = () => {
   }, [])
 
   async function mintClickHandler() {
-    function DataURIToBlob(dataURI: string) {
-      const splitDataURI = dataURI.split(",")
-      const byteString = splitDataURI[0].indexOf("base64") >= 0
-        ? atob(splitDataURI[1])
-        : decodeURI(splitDataURI[1])
-      const mimeString = splitDataURI[0].split(":")[1].split(";")[0]
+    // async function dataUriToBlob(dataURI: string) {
+    // const splitDataURI = dataURI.split(",")
+    // const byteString = splitDataURI[0].indexOf("base64") >= 0
+    //   ? atob(splitDataURI[1])
+    //   : decodeURI(splitDataURI[1])
+    // const mimeString = splitDataURI[0].split(":")[1].split(";")[0]
 
-      const ia = new Uint8Array(byteString.length)
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i)
-      }
+    // const ia = new Uint8Array(byteString.length)
+    // for (let i = 0; i < byteString.length; i++) {
+    //   ia[i] = byteString.charCodeAt(i)
+    // }
 
-      return new Blob([ ia ], { type: mimeString })
-    }
+    // return new Blob([ ia ], { type: mimeString })
+
+    // return await (await fetch(dataURI)).blob()
+    // }
+
+    if (!state.image) return
+    if (!state.item) return
 
     async function uploadToPinata(): Promise<PinataRes> {
       const formData = new FormData()
-      formData.append("file", DataURIToBlob(state.image as string))
+      formData.append("file", await (await fetch(state.image!)).blob())
       const metadata = JSON.stringify({
         name: `${state.item?.id}-${Date.now()}`,
       })
@@ -233,8 +237,6 @@ const ImageDetection: FC = () => {
     setIsMinting(true)
     await registerTrafficLightDetection(res.IpfsHash)
     setIsMinting(false)
-
-    if (!state.item) return
 
     navigate(
       `/app/collection/${state.item.id}`,

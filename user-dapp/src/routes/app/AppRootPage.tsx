@@ -1,4 +1,4 @@
-import BottomNavBar from "@/modules/BottomNavBar"
+import BottomNavBar from "@/modules/nav/BottomNavBar"
 import { APIProvider } from "@vis.gl/react-google-maps"
 import { Layout } from "antd"
 import {

@@ -87,6 +87,7 @@ const CollectionIdPage: FC = () => {
                   lat: item.lat,
                   lng: item.lng,
                 }}
+                mapId={"3921004b6104a83f"}
                 defaultZoom={18}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}

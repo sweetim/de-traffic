@@ -1,12 +1,12 @@
 import { FC } from "react"
 
+import { TRAFFIC_DATA_CONTRACT_ADDRESS } from "@/contract"
+import { useReadTrafficDataGetAllValidators } from "@/generated"
 import {
   Table,
   TableProps,
   Tag,
 } from "antd"
-import { CONTRACT_ADDRESS } from "../contract"
-import { useReadTrafficDataGetAllValidators } from "../generated"
 
 type ValidatorMetadata = {
   name: string
@@ -15,9 +15,9 @@ type ValidatorMetadata = {
   validatedCount: number
 }
 
-const ValidatorPage: FC = () => {
+const AppValidatorPage: FC = () => {
   const { data, isSuccess } = useReadTrafficDataGetAllValidators({
-    address: CONTRACT_ADDRESS,
+    address: TRAFFIC_DATA_CONTRACT_ADDRESS,
   })
   console.log(data)
   const columns: TableProps<ValidatorMetadata>["columns"] = [
@@ -71,4 +71,4 @@ const ValidatorPage: FC = () => {
   )
 }
 
-export default ValidatorPage
+export default AppValidatorPage

@@ -8,6 +8,7 @@ import {
   theme,
 } from "antd"
 
+import { APIProvider } from "@vis.gl/react-google-maps"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
@@ -31,7 +32,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               algorithm: theme.darkAlgorithm,
             }}
           >
-            <RouterProvider router={router} />
+            <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API}>
+              <RouterProvider router={router} />
+            </APIProvider>
           </ConfigProvider>
         </QueryClientProvider>
       </WagmiProvider>
